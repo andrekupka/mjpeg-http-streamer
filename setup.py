@@ -4,6 +4,6 @@ from setuptools import setup
 setup(
     name='mjpeg_http_streamer',
     install_requires=[
-        'aiohttp >= 3.8'
+        'aiohttp >= 3.8.1'
     ]
 )
