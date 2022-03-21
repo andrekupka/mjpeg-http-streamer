@@ -6,8 +6,8 @@ class MJPEGStreamReader:
         self._stream_provider = stream_provider
         self._output_queue = output_queue
 
-        self._frame_start = None
-        self._frame_end = None
+        self._found_frame = False
+        self._current_index = 0
         self._buffer = b""
 
     async def run(self):
@@ -20,25 +20,28 @@ class MJPEGStreamReader:
             self._buffer += data
 
             while True:
-                if self._frame_start is None:
+                if not self._found_frame:
                     try:
                         index = self._buffer.index(self._start_symbol)
-                        self._frame_start = index
+                        self._buffer = self._buffer[index:]
+                        self._found_frame = True
                     except ValueError:
-                        self._buffer = b""
+                        characters_to_keep = min(len(self._buffer), len(self._start_symbol)-1)
+                        self._buffer = self._buffer[-characters_to_keep:]
                         break
+                    finally:
+                        self._current_index = 0
 
-                if self._frame_start is not None and self._frame_end is None:
-                    try:
-                        index = self._buffer.index(self._end_symbol)
-                        self._frame_end = index
-                    except ValueError:
-                        break
-
-                if self._frame_start is not None and self._frame_end is not None:
-                    frame = self._buffer[self._frame_start:self._frame_end + len(self._end_symbol)]
+                try:
+                    index = self._buffer[self._current_index:].index(self._end_symbol) + self._current_index
+                    frame_end_index = index + len(self._end_symbol)
+                    # publish frame
+                    frame = self._buffer[0:frame_end_index]
                     await self._output_queue.put(frame)
                     await self._stream_provider.tick()
-                    self._buffer = self._buffer[self._frame_end + len(self._end_symbol):]
-                    self._frame_start = None
-                    self._frame_end = None
+
+                    self._buffer = self._buffer[frame_end_index:]
+                    self._current_index = 0
+                except ValueError:
+                    self._current_index = max(0, len(self._buffer) - len(self._end_symbol))
+                    break
