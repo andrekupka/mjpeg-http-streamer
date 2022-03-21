@@ -1,6 +1,7 @@
 .idea/
 *.iml
 
+*.egg-info
 *.pyc
 venv/
 dist/
