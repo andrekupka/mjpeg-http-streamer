@@ -1,6 +1,7 @@
 # mjpeg-http-streamer
 
 ![Build](https://github.com/andrekupka/mjpeg-http-streamer/actions/workflows/build-and-release.yaml/badge.svg)
+![Release](https://img.shields.io/github/v/release/andrekupka/mjpeg-http-streamer)
 
 A small python tool that reads a plain MJPEG stream from `stdin` and publishes it as http MJPEG stream.
 It can be used in combination with `libcamera` on a Raspberry Pi to create a http stream for [OctoPrint](https://octoprint.org/).
