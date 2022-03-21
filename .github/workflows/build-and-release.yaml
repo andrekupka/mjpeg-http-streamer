@@ -9,7 +9,7 @@ on:
 
 jobs:
   build-and-publish:
-    name: Build and publish python distribution to PyPI
+    name: Build
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@master
