@@ -1,11 +1,11 @@
 import asyncio
 import sys
 
-from mjpeg_http_streamer.app import make_app, run_app
-from mjpeg_http_streamer.arguments import parse_arguments
-from mjpeg_http_streamer.frame_broker import FrameBroker
-from mjpeg_http_streamer.stream_provider import InstantStreamProvider, ClockedStreamProvider
-from mjpeg_http_streamer.mjpeg_frame_reader import MJPEGStreamReader
+from src.mjpeg_http_streamer.app import make_app, run_app
+from src.mjpeg_http_streamer.arguments import parse_arguments
+from src.mjpeg_http_streamer.frame_broker import FrameBroker
+from src.mjpeg_http_streamer.stream_provider import InstantStreamProvider, ClockedStreamProvider
+from src.mjpeg_http_streamer.mjpeg_frame_reader import MJPEGStreamReader
 
 
 async def create_stdin_stream():
