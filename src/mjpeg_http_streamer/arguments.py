@@ -4,7 +4,7 @@ import argparse
 SOURCE_STDIN = "stdin"
 SOURCE_FIFO = "fifo"
 
-DEFAULT_FIFO_PATH = "/tmp/mjpeg_http_streamer.fifo"
+DEFAULT_FIFO_PATH = "/run/mjpeg_http_streamer.fifo"
 
 
 def port(value):
