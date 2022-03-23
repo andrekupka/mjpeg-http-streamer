@@ -27,18 +27,20 @@ async def get_stream(request):
 
         await stream.prepare(request)
 
-        prefix = b''
         header = f'--{boundary}\r\nContent-Type: image/jpeg\r\n'.encode()
+
+        async def write_frame(source_frame, prefix=b'\r\n'):
+            message = prefix + header + f'Content-Length: {len(source_frame)}\r\n\r\n'.encode() + source_frame
+            await stream.write(message)
+
+        await write_frame(frame_broker.current_frame, prefix=b'')
 
         while True:
             frame = await subscription.get()
             if frame is None:
                 break
 
-            message = prefix + header + f'Content-Length: {len(frame)}\r\n\r\n'.encode() + frame
-            prefix = b'\r\n'
-
-            await stream.write(message)
+            await write_frame(frame)
 
         await stream.write_eof()
         return stream
