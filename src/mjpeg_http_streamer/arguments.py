@@ -4,6 +4,8 @@ import argparse
 SOURCE_STDIN = "stdin"
 SOURCE_FIFO = "fifo"
 
+DEFAULT_FIFO_PATH = "/tmp/mjpeg_http_streamer.fifo"
+
 
 def port(value):
     int_value = int(value)
@@ -40,4 +42,12 @@ def parse_arguments():
     parser.add_argument("-s", "--source", type=str, choices=[SOURCE_STDIN, SOURCE_FIFO], default=SOURCE_STDIN,
                         help='Specifies the mjpeg input source.')
 
-    return parser.parse_args()
+    parser.add_argument("-f", "--fifo", type=str, default=DEFAULT_FIFO_PATH,
+                        help=f'Path to the fifo. Must only be specified if -s/--source is set to {SOURCE_FIFO}')
+
+    args = parser.parse_args()
+
+    if args.source != SOURCE_FIFO and args.fifo != DEFAULT_FIFO_PATH:
+        parser.error(f'--fifo requires --source to be {SOURCE_FIFO}')
+
+    return args

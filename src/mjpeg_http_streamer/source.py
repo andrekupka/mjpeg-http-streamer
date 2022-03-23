@@ -69,7 +69,7 @@ def create_input_source(args):
     if source_type == SOURCE_STDIN:
         return StdinInputSource()
     elif source_type == SOURCE_FIFO:
-        return FifoInputSource("/tmp/mjpeg_http_streamer.fifo")
+        return FifoInputSource(args.fifo)
 
     raise ValueError(f"Unknown source type ${source_type}.")
 
