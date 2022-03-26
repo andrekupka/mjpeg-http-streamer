@@ -45,6 +45,9 @@ def parse_arguments():
     parser.add_argument("-f", "--fifo", type=str, default=DEFAULT_FIFO_PATH,
                         help=f'Path to the fifo. Must only be specified if -s/--source is set to {SOURCE_FIFO}')
 
+    parser.add_argument("-v", "--verbose", action="store_true",
+                        help=f'Enables verbose mode to get more logging information')
+
     args = parser.parse_args()
 
     if args.source != SOURCE_FIFO and args.fifo != DEFAULT_FIFO_PATH:

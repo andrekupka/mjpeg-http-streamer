@@ -9,6 +9,12 @@ from mjpeg_http_streamer.source import create_input_source
 from mjpeg_http_streamer.stream_provider import InstantStreamProvider, ClockedStreamProvider
 
 
+def get_log_level(args):
+    if args.verbose:
+        return logging.DEBUG
+    return logging.INFO
+
+
 def create_stream_provider(source, args):
     clocked = args.clocked
     if clocked is None:
@@ -18,6 +24,8 @@ def create_stream_provider(source, args):
 
 async def main():
     args = parse_arguments()
+
+    logging.basicConfig(level=get_log_level(args))
 
     frame_queue = asyncio.Queue()
 

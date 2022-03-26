@@ -8,6 +8,7 @@ from mjpeg_http_streamer.arguments import SOURCE_STDIN, SOURCE_FIFO
 
 import logging
 
+
 class InputSource(abc.ABC):
 
     @abstractmethod
@@ -27,7 +28,7 @@ class StdinInputSource(InputSource):
         self._reader = None
 
     async def read(self, n):
-        return self._reader.read(n)
+        return await self._reader.read(n)
 
     async def __aenter__(self):
         self._reader = await create_pipe_reader(sys.stdin)
