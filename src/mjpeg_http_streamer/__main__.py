@@ -1,4 +1,5 @@
 import asyncio
+import logging
 
 from mjpeg_http_streamer.app import make_app, run_app
 from mjpeg_http_streamer.arguments import parse_arguments
@@ -27,6 +28,7 @@ async def main():
         frame_broker = FrameBroker(frame_queue)
         app = make_app(frame_broker)
 
+        logging.info(f"Starting streamer on {args.listen}:{args.port}.")
         await asyncio.gather(
             run_app(app, args.listen, args.port),
             stream_reader.run(),

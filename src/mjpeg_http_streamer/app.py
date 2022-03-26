@@ -1,18 +1,22 @@
+import logging
+
 from aiohttp import web
 
 FRAME_BROKER_KEY = 'frame_broker'
 
 
 async def get_snapshot(request):
+    logging.info(f"Client '{request.remote}' connected for snapshot.")
     frame_broker = request.app[FRAME_BROKER_KEY]
     frame = frame_broker.current_frame
     if frame is None:
-        return web.Response(text="no snapshot", status=404)
+        return web.Response(text="no snapshot available", status=404)
 
     return web.Response(body=frame, content_type='image/jpeg')
 
 
 async def get_stream(request):
+    logging.info(f"Client '{request.remote}' connected for stream.")
     frame_broker = request.app[FRAME_BROKER_KEY]
     with frame_broker.subscribe() as subscription:
         boundary = 'foobar'

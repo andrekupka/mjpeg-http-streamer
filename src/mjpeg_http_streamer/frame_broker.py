@@ -17,11 +17,9 @@ class Subscription:
         return await self._queue.get()
 
     def __enter__(self):
-        print("Subscribed")
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        print("Unsubscribed")
         self.unsubscribe()
 
 
